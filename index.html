@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script type="text/javascript" src="libs/swfobject.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+
+</head>
+<style>
+  .scratch {
+    display: inline;
+  }
+
+  input {
+    width: 200px;
+    height: 120px;
+    font-size: 40px;
+  }
+</style>
+
+<body>
+  <div class="Get">
+    <input type="button" id="Get" name="get" value="Get">
+    <input type="button" id="Set" name="set" value="Set">
+    <input type="button" id="GetBase64" name="GetBase64" value="Base64">
+    <p id='show'></p>
+  </div>
+  <div class="scratch">
+    <div id='scratchGet'></div>
+    <div class="Gdata"></div>
+    <div class="Sdata"></div>
+    <div id="scratchSet"></div>
+  </div>
+  <div class="Base64"></div>
+  <script type="text/javascript">
+    JSeditorReady = function() {
+      console.log("JSeditorReady");
+      return true;
+    };
+
+
+
+    var installPlayer = function(swfUrl, swfID, width, height, callback) {
+      var width = width;
+      var height = height;
+      var flashVars = {
+        autostart: 'false',
+        extensionDevMode: 'true'
+        // urlOverrides: {
+        //   sitePrefix: "http://120.114.170.5/scratch/",
+        //   //   //siteCdnPrefix: "http://120.114.170.5/scratch/",
+        //   //   //assetPrefix: "http://120.114.170.5/scratch/",
+        //   //   //assetCdnPrefix: "http://120.114.170.5/scratch/",
+        //   staticFiles: ""
+        // }
+      };
+      var params = {
+        allowscriptaccess: 'always',
+        allowfullscreen: 'true',
+        //wmode: "transparent",
+        menu: 'true'
+      };
+
+      $.each(flashVars, function(prop, val) {
+        if ($.isPlainObject(val))
+          flashVars[prop] = encodeURIComponent(JSON.stringify(val));
+      });
+
+      var attributes = {};
+      swfobject.embedSWF(swfUrl, swfID, width, height, 11.6, 'libs/expressInstall.swf',
+        flashVars, params, attributes, callback);
+
+
+
+
+      $('#Get').click(function(event) {
+        /* Act on the event */
+        var scratchGet = $('#scratchGet')[0];
+        var rdata = scratchGet.ASgetAllObject();
+        $('.Gdata').html(rdata);
+      });
+
+      $('#GetBase64').click(function(event) {
+        /* Act on the event */
+        var GetBase64 = $('#scratchGet')[0];
+        var rdata = GetBase64.ASgetScratch();
+        $('.Base64').html(rdata);
+      });
+
+      $('#Set').click(function(event) {
+        /* Act on the event */
+        var scratchSet = $('#scratchSet')[0];
+        var data = $('.Base64').text();
+        scratchSet.ASsetScratch(data);
+
+      });
+    };
+
+    var width = 1024;
+    var height = 768;
+    var sScratchUrl = 'http://120.108.208.134/scratch-flash/build/11.6/Scratch.swf';
+    installPlayer(sScratchUrl, 'scratchGet', width, height);
+    installPlayer(sScratchUrl, 'scratchSet', width, height);
+
+    //loading check
+    var playerLoaded = function(percentGet, percentSet) {
+      //console.log(percent);
+      if (percentGet >= 99 && percentSet >= 99) {
+        clearInterval(swfLoadInterval);
+      }
+      $('#show').append('讀取進度' + percentGet + ',' + percentSet + '</br>');
+      console.log(percentGet, percentSet);
+    }
+
+    var errorCount = 0;
+    var interFunc = function() {
+      var scratchPlayer = document.getElementById('scratchGet');
+      var scratchPlayer1 = document.getElementById('scratchSet');
+      if (!scratchPlayer || !scratchPlayer1) {
+        return;
+      }
+      try {
+        var percentGet = scratchPlayer.PercentLoaded();
+        var percentSet = scratchPlayer.PercentLoaded();
+        playerLoaded(percentGet, percentSet);
+      } catch (e) {
+        console.log("loading process is not supported");
+        if (errorCount > 99) {
+          clearInterval(swfLoadInterval);
+        } else {
+          errorCount++;
+        }
+      }
+    };
+
+    var swfLoadInterval = setInterval(interFunc, 500);
+  </script>
+</body>
+
+</html>

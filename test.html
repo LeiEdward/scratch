@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title></title>
+<style>
+  input {width:200px;height:120px;font-size:40px;}
+</style>
+<script type="text/javascript" src="libs/swfobject.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+  JSeditorReady = function() {
+    console.log("JSeditorReady");
+    return true;
+  };
+
+    var flashVars = {
+      autostart: 'false',
+      extensionDevMode: 'true'
+    };
+    var params = {
+      allowscriptaccess: 'always',
+      allowfullscreen: 'true',
+      wmode: "transparent",
+      menu: 'true'
+    };
+    var attributes = {};
+    swfobject.embedSWF("libs/Scratch.swf", "scratchGet", "1600", "768", "11.6", "libs/expressInstall.swf", flashVars, params, attributes);
+
+    $(function() {
+      $('#Get').click(function(event) {
+        /* Act on the event */
+        var scratchGet = $('#scratchGet')[0];
+        var rdata = scratchGet.ASgetAllObject();
+        $('.Gdata').html(rdata);
+      });
+    });
+</script>
+</head>
+<body>
+  <div>
+    <input type="button" id="Get" name="get" value="Get">
+    <input type="button" id="Set" name="set" value="Set">
+    <input type="button" id="GetBase64" name="GetBase64" value="Base64">
+  </div>
+  <br/>
+  <div id="scratchGet" style="position:relative;"></div>
+</body>
+</html>
