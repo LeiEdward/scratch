@@ -22,18 +22,33 @@
     var params = {
       allowscriptaccess: 'always',
       allowfullscreen: 'true',
-      wmode: "transparent",
+      // wmode: "transparent",
       menu: 'true'
     };
     var attributes = {};
     swfobject.embedSWF("libs/Scratch.swf", "scratchGet", "1600", "768", "11.6", "libs/expressInstall.swf", flashVars, params, attributes);
+    swfobject.embedSWF("libs/Scratch.swf", "scratchSet", "1600", "768", "11.6", "libs/expressInstall.swf", flashVars, params, attributes);
 
     $(function() {
       $('#Get').click(function(event) {
-        /* Act on the event */
         var scratchGet = $('#scratchGet')[0];
+        console.log(scratchGet);
         var rdata = scratchGet.ASgetAllObject();
-        $('.Gdata').html(rdata);
+        $('#Gdata').html(rdata);
+      });
+
+      $('#Set').click(function(event) {
+        /* Act on the event */
+        var scratchSet = $('#scratchSet')[0];
+        var data = $('.Base64').text();
+        scratchSet.ASsetScratch(data);
+      });
+
+      $('#GetBase64').click(function(event) {
+        /* Act on the event */
+        var GetBase64 = $('#scratchGet')[0];
+        var rdata = GetBase64.ASgetScratch();
+        $('.Base64').html(rdata);
       });
     });
 </script>
@@ -45,6 +60,14 @@
     <input type="button" id="GetBase64" name="GetBase64" value="Base64">
   </div>
   <br/>
-  <div id="scratchGet" style="position:relative;"></div>
+  初始傳案
+  <div id="scratchGet"></div>
+  <div id="Gdata"></div>
+
+  <br/>
+  <br/>
+  複製專案
+  <div id="scratchSet"></div>
+  <div class="Base64"></div>
 </body>
 </html>

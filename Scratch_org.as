@@ -92,7 +92,7 @@ public class Scratch extends Sprite {
 	public var isMicroworld:Boolean = false;
 
 	public var presentationScale:Number;
-
+	
 	// Runtime
 	public var runtime:ScratchRuntime;
 	public var interp:Interpreter;
@@ -229,12 +229,7 @@ public class Scratch extends Sprite {
 	}
 
 	protected function setupExternalInterface(oldWebsitePlayer:Boolean):void {
-
-
 		if (!jsEnabled) return;
-		addExternalCallback('ASgetAllObject', ASgetAllObject);
-		addExternalCallback('ASgetScratch', ASgetScratch);
-		addExternalCallback('ASsetScratch', ASsetScratch);
 
 		addExternalCallback('ASloadExtension', extensionManager.loadRawExtension);
 		addExternalCallback('ASextensionCallDone', extensionManager.callCompleted);
@@ -402,50 +397,6 @@ public class Scratch extends Sprite {
 	public function getMediaPane(app:Scratch, type:String):MediaPane {
 		return new MediaPane(app, type);
 	}
-
-	public function ASgetAllObject():Object {
-		var r:String;
-		try{
-
-		r = util.JSON.stringify(stagePane.allObjects());
-		logMessage('stagePane.allObjects' , r);
-		}catch(e:Error){
-		r='error';
-		}
-		return r;
-	}
-	public function ASgetScratch():Object{
-
-
-		var obj:Object;
-		var r:String;
-
-
-		try
-		{
-			var projIO:ProjectIO = new ProjectIO(this);
-			var zipData:ByteArray = projIO.encodeProjectAsZipFile(stagePane);
-
-			r = Base64Encoder.encode( zipData );
-		}
-		catch (err:Error)
-		{
-			r = 'error';
-		}
-		return r;
-	}
-
-	public function ASsetScratch(base64:String):void{
-		var __content:ByteArray = Base64Encoder.decode( base64 );
-		try{
-			app.setProjectName('');
-			runtime.installProjectFromData(__content);
-		}catch(e){
-			logMessage('load error' , e);
-		}
-	}
-
-
 
 	public function getScratchStage():ScratchStage {
 		return new ScratchStage();
@@ -1186,7 +1137,7 @@ public class Scratch extends Sprite {
 	private function showAboutDialog():void {
 		DialogBox.notify(
 				'Scratch 2.0 ' + versionString,
-				'\n\nCopyright 穢 2012 MIT Media Laboratory' +
+				'\n\nCopyright © 2012 MIT Media Laboratory' +
 				'\nAll rights reserved.' +
 				'\n\nPlease do not distribute!', stage);
 	}
