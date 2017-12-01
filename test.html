@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <title></title>
 <style>
-  input {width:200px;height:120px;font-size:40px;}
+  input {height:120px;font-size:40px;}
 </style>
 <script type="text/javascript" src="libs/swfobject.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
@@ -26,15 +26,22 @@
       menu: 'true'
     };
     var attributes = {};
-    swfobject.embedSWF("libs/Scratch.swf", "scratchGet", "1600", "768", "11.6", "libs/expressInstall.swf", flashVars, params, attributes);
-    swfobject.embedSWF("libs/Scratch.swf", "scratchSet", "1600", "768", "11.6", "libs/expressInstall.swf", flashVars, params, attributes);
+    swfobject.embedSWF("./libs/Scratch.swf", "scratchGet", "1280", "768", "11.6", "./libs/expressInstall.swf", flashVars, params, attributes);
+    swfobject.embedSWF("./libs/Scratch.swf", "scratchSet", "1280", "768", "11.6", "./libs/expressInstall.swf", flashVars, params, attributes);
 
     $(function() {
+      if(swfobject.hasFlashPlayerVersion("1")) {
+      }
+      else
+      {
+        $('#initflash').html('<object id="iniflash" width="400" height="400" type="application/x-shockwave-flash"></object>');
+      }
+
       $('#Get').click(function(event) {
         var scratchGet = $('#scratchGet')[0];
         console.log(scratchGet);
         var rdata = scratchGet.ASgetAllObject();
-        $('#Gdata').html(rdata);
+        $('#Gdata').html('專案A資料: ' + rdata);
       });
 
       $('#Set').click(function(event) {
@@ -48,26 +55,33 @@
         /* Act on the event */
         var GetBase64 = $('#scratchGet')[0];
         var rdata = GetBase64.ASgetScratch();
-        $('.Base64').html(rdata);
+        $('.Base64').html('編碼資料: ' + rdata);
+      });
+
+      $('#iniflash').click(function() {
+        location.reload();
       });
     });
+
 </script>
 </head>
-<body>
+<body id="initflash">
   <div>
-    <input type="button" id="Get" name="get" value="Get">
-    <input type="button" id="Set" name="set" value="Set">
-    <input type="button" id="GetBase64" name="GetBase64" value="Base64">
+    <input type="button" id="Get" name="Get" value="讀取專案A資料">
+    <input type="button" id="GetBase64" name="GetBase64" value="先將資料轉編碼才可以複製到專案B">
+    <input type="button" id="Set" name="Set" value="將專案A複製到專案B">
   </div>
+  <div class="Base64" style="width:100%;text-overflow:ellipsis;white-space:normal;overflow:hidden;"></div>
   <br/>
-  初始傳案
-  <div id="scratchGet"></div>
   <div id="Gdata"></div>
-
+  <br/>
+  專案A
+  <br/>
+  <div id="scratchGet"></div>
   <br/>
   <br/>
-  複製專案
+  專案B
+  <br/>
   <div id="scratchSet"></div>
-  <div class="Base64"></div>
 </body>
 </html>
