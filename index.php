@@ -1,6 +1,7 @@
 <?php
-
-
+  if(!empty($_POST['data'])) {
+    file_put_contents(realpath('./tmp/').'/test.log', date('Y-m-d H:i:s').' :壓力測試中...'.$_POST['data'].PHP_EOL, FILE_APPEND);
+  }
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -13,6 +14,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+// ===== 根據瀏覽器動態改變元素大小 ====== //
+var browser = detectBrowser();
+alert(browser);
 $(function (){
   $('#btn_submit').click( function () {
     var fileupload = $('#fileupload').prop('files')[0];
@@ -41,11 +45,10 @@ $(function (){
 </script>
 </head>
 <body>
-    <div class="form-inline" style="width:800px;margin:0px auto;">
-      <label for="fileupload">Scratch 專案分析</label>
-      <input id="fileupload" type="file" class="form-control mb-2 mr-sm-2 mb-sm-0" />
-      <button id="btn_submit" class="btn btn-primary">Submit</button>
-    </div>
-  </form>
+  <div class="form-inline" style="width:800px;margin:0px auto;">
+    <label for="fileupload">Scratch 專案分析</label>
+    <input id="fileupload" type="file" class="form-control mb-2 mr-sm-2 mb-sm-0" />
+    <button id="btn_submit" class="btn btn-primary">Submit</button>
+  </div>
 </body>
 </html>
